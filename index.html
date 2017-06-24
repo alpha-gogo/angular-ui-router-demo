@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>爱鲜蜂</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="./js/angular.js"></script>
+    <script type="text/javascript" src="./js/angular-ui-router.js"></script>
+
+    <style type="text/css">
+        .content{
+            width: 100%;
+            height: 600px;
+        }
+        .nav{
+            display: flex;
+            justify-content: space-between;
+            /*position: fixed;*/
+
+        }
+    </style>
+</head>
+<body ng-app="app">
+    <!-- SPA：单页面应用，在整个应用程序中，只有一个， -->
+    <!-- 容器标签，用来展示各个子页面 -->
+    <div class="content" ui-view></div>
+    <!-- 路由标签 -->
+    <nav class="nav">
+        <a ui-sref="home">首页</a>
+        <a ui-sref=" express">闪送超市</a>
+        <a ui-sref="cart">购物车</a>
+        <a ui-sref="mine">我的</a>
+    </nav>
+</body>
+<script type="text/javascript">
+    // angular下的module函数中第二个参数是应用程序依赖模块
+    var app = angular.module("app", ["ui.router"]);
+
+    // 给应用程序配置路由
+    app.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
+
+        // 设置默认路由，当用户没有指定有个具体的页面时，向用户展示默认的页面：home
+        $urlRouterProvider
+        .when("", "home")
+        .when("/home", "/home/goodlist");
+
+        // 利用$stateProvider服务架设路由条目
+        $stateProvider
+        .state("home", {
+            url: "/home",
+            templateUrl: "./home/home.html"
+        })
+        .state("express", {
+            url: "/express",
+            templateUrl: "./express/express.html"
+        })
+        .state("cart", {
+            url: "/cart",
+            templateUrl: "./cart/cart.html"
+        })
+        .state("mine", {
+            url: "/mine",
+            templateUrl: "./mine/mine.html",
+            controller: "mineCtrl"
+        })
+        .state("good-detail", {
+            url: "/good-detail:id",
+            templateUrl: "./home/child/good-detail.html",
+            controller: "goodDetailCtrl"
+        })
+        // 二级路由
+        .state("home.goodlist", {
+            url: "/goodlist",
+            templateUrl: "./home/child/goodlist.html",
+            controller: "goodlistCtrl"
+        }).
+        state("home.customlist", {
+            url: "/customlist",
+            templateUrl: "./home/child/customlist.html"
+        })
+
+
+    }])
+</script>
+ <script type="text/javascript" src="./mine/mine.js"></script>
+ <script type="text/javascript" src="./home/child/goodlist.js"></script>
+ <script type="text/javascript" src="./home/child/good-detail.js"></script>
+</html>
